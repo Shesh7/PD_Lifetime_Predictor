@@ -1,13 +1,13 @@
-# ⚡ Electric Motor Partial Discharge Calculator
+# ⚡ Electric Motor Parameter Calculator
 
-A professional Streamlit application for calculating partial discharge in electric motor stators with a beautiful, modern UI.
+A professional Streamlit application for calculating various motor parameters including PWM pulses, wheel revolutions, motor revolutions, and phase changes with a beautiful, modern UI.
 
 ## 🚀 Features
 
-- **Interactive Calculator**: Real-time partial discharge calculation based on multiple parameters
-- **Beautiful UI**: Modern design with gradient colors and professional styling
-- **Visual Results**: Interactive gauge charts and severity indicators
-- **Comprehensive Formula**: Detailed explanation of the calculation methodology
+- **Interactive Calculator**: Real-time motor parameter calculation based on multiple inputs
+- **Beautiful UI**: Modern design with native Streamlit components
+- **Visual Results**: Interactive charts and parameter visualizations
+- **Comprehensive Calculations**: Detailed breakdown of all motor parameters
 - **Responsive Design**: Works on desktop and mobile devices
 - **Navigation**: Easy-to-use sidebar navigation with multiple sections
 
@@ -15,57 +15,95 @@ A professional Streamlit application for calculating partial discharge in electr
 
 The calculator accepts the following parameters:
 
-1. **Voltage (V)**: Operating voltage of the motor (100V - 10kV)
-2. **Frequency (Hz)**: Operating frequency (25-100 Hz)
-3. **Capacitance (nF)**: Stator winding capacitance (0.1-100 nF)
-4. **Temperature (°C)**: Operating temperature (0-100°C)
-5. **Humidity (%)**: Environmental humidity (0-100%)
-6. **Insulation Age (years)**: Age of stator insulation (0.1-30 years)
+1. **Runtime (hours)**: Total operating time of the motor (0.1-10,000 hours)
+2. **PWM Frequency (kHz)**: PWM frequency in kilohertz (1-100 kHz)
+3. **Mileage (km)**: Total distance traveled (0.1-100,000 km)
+4. **Tyre Diameter (m)**: Diameter of the tyre in meters (0.1-2.0 m)
+5. **Axle Transmission Ratio**: Ratio between axle and motor (0.1-100)
+6. **Pole Pairs**: Number of pole pairs in the motor (1-20)
 
-## 🧮 Calculation Formula
+## 🧮 Calculation Formulas
 
-The application uses a comprehensive formula that considers multiple factors:
+The application uses comprehensive formulas to calculate motor parameters:
 
+### 1. PWM Pulses Over Lift
 ```
-Partial Discharge = Base_PD × Temperature_Factor × Humidity_Factor × Age_Factor
+PWM Pulses = Runtime (seconds) × PWM Frequency (Hz)
 ```
 
-Where:
-- **Base_PD** = Voltage × Frequency × Capacitance × 10⁻⁶
-- **Temperature_Factor** = 1 + (Temperature - 25) × 0.02
-- **Humidity_Factor** = 1 + (Humidity - 50) × 0.01
-- **Age_Factor** = 1 + (Age - 1) × 0.1
+### 2. Wheel Revolutions
+```
+Wheel Revolutions = Mileage (meters) ÷ (Tyre Diameter × π)
+```
 
-## 📊 Severity Levels
+### 3. Motor Revolutions
+```
+Motor Revolutions = Wheel Revolutions × Axle Transmission Ratio
+```
 
-The application categorizes results into four severity levels:
+### 4. Phase Changes
+```
+Phase Changes = Pole Pairs × 2 × Motor Revolutions
+```
 
-- 🟢 **Low (< 100 pC)**: Good insulation condition
-- 🟡 **Medium (100-500 pC)**: Moderate PD, monitor closely
-- 🟠 **High (500-1000 pC)**: High PD, schedule maintenance
-- 🔴 **Critical (> 1000 pC)**: Immediate attention required
+## 📊 Calculated Results
+
+The application provides four key calculated values:
+
+- **PWM Pulses**: Total number of PWM pulses over the entire runtime
+- **Wheel Revolutions**: Total number of wheel rotations based on mileage
+- **Motor Revolutions**: Total motor rotations considering transmission ratio
+- **Phase Changes**: Total phase transitions based on pole pairs and motor revolutions
 
 ## 🛠️ Installation & Setup
 
 ### Prerequisites
 - Python 3.7 or higher
 - pip (Python package installer)
+- Virtual environment (recommended)
 
 ### Installation Steps
 
 1. **Clone or download the project files**
 
-2. **Install dependencies**:
+2. **Create and activate a virtual environment** (recommended):
+   ```bash
+   # Create virtual environment
+   python -m venv venv
+   
+   # Activate virtual environment
+   # On macOS/Linux:
+   source venv/bin/activate
+   # On Windows:
+   venv\Scripts\activate
+   ```
+
+3. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Run the application**:
+4. **Run the application**:
    ```bash
    streamlit run app.py
    ```
 
-4. **Open your browser** and navigate to the URL shown in the terminal (usually `http://localhost:8501`)
+5. **Open your browser** and navigate to the URL shown in the terminal (usually `http://localhost:8501`)
+
+### Alternative: Using Existing Virtual Environment
+
+If you have an existing virtual environment, you can use it:
+
+```bash
+# Activate your existing virtual environment
+source /path/to/your/venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the app
+streamlit run app.py
+```
 
 ## 📁 Project Structure
 
@@ -73,6 +111,7 @@ The application categorizes results into four severity levels:
 shesh-thesis/
 ├── app.py              # Main Streamlit application
 ├── requirements.txt    # Python dependencies
+├── config.py          # Configuration settings
 └── README.md          # This file
 ```
 
@@ -80,10 +119,10 @@ shesh-thesis/
 
 1. **Navigate to Calculator**: Use the sidebar to select "Calculator"
 2. **Enter Parameters**: Fill in the input fields with your motor specifications
-3. **Click Calculate**: Press the "🚀 Calculate Partial Discharge" button
-4. **Review Results**: Check the calculated PD value and severity level
-5. **Interpret Charts**: Use the interactive gauge chart for visual assessment
-6. **Follow Recommendations**: Read the severity-based recommendations
+3. **Click Calculate**: Press the "🚀 Calculate Motor Parameters" button
+4. **Review Results**: Check the calculated values and visualizations
+5. **Explore Charts**: Use the interactive charts for visual assessment
+6. **View Details**: Check the detailed breakdown and formulas
 
 ## 🔧 Technical Details
 
@@ -92,21 +131,25 @@ shesh-thesis/
 - **pandas**: Data manipulation
 - **numpy**: Numerical computations
 - **plotly**: Interactive charts and visualizations
-- **streamlit-option-menu**: Navigation menu component
+
+### Key Classes
+- `ElectricMotor_PD_Calculator`: Main calculation class with methods for:
+  - `calculate_number_of_pwm_pulses_over_lift()`
+  - `calculate_number_of_wheel_revolutions()`
+  - `calculate_number_of_electric_motor_revolutions()`
+  - `calculate_number_of_phase_changes()`
 
 ### Key Functions
-- `calculate_partial_discharge()`: Main calculation function
-- `calculate_pd_severity()`: Severity level determination
-- `create_pd_chart()`: Interactive gauge chart creation
+- `create_calculation_chart()`: Bar chart for calculated values
+- `create_parameter_summary_chart()`: Radar chart for input parameters
 
 ## 🎨 UI Features
 
-- **Gradient Headers**: Beautiful gradient text effects
-- **Card-based Layout**: Organized information in styled cards
-- **Interactive Charts**: Plotly-based gauge charts
-- **Color-coded Results**: Visual severity indicators
-- **Responsive Design**: Works on all screen sizes
-- **Professional Styling**: Modern CSS with hover effects
+- **Native Streamlit Components**: Clean, professional interface
+- **Interactive Charts**: Plotly-based visualizations
+- **Responsive Layout**: Works on all screen sizes
+- **Professional Styling**: Modern design with proper spacing
+- **Expandable Sections**: Detailed information in collapsible sections
 
 ## 📚 Additional Information
 
@@ -114,11 +157,21 @@ shesh-thesis/
 - **Help Section**: Detailed usage guidelines and parameter explanations
 - **Formula Explanation**: Complete breakdown of the calculation methodology
 
+## 🔍 Calculation Breakdown
+
+The application provides detailed step-by-step calculations:
+
+- **Runtime Conversion**: Hours to seconds
+- **PWM Frequency Conversion**: kHz to Hz
+- **Mileage Conversion**: km to meters
+- **Wheel Circumference**: Based on tyre diameter
+- **Transmission Calculations**: Motor to wheel ratios
+
 ## ⚠️ Important Notes
 
-- This calculator provides estimates based on theoretical models
-- For critical applications, always consult with qualified engineers
-- Results should be used as part of a comprehensive motor health assessment
+- This calculator provides estimates based on the provided parameters
+- For critical applications, always verify calculations with qualified engineers
+- Results should be used as part of a comprehensive motor analysis
 - Regular monitoring and maintenance schedules should be followed
 
 ## 🤝 Contributing
@@ -128,6 +181,7 @@ Feel free to enhance the application by:
 - Implementing data export features
 - Adding historical data tracking
 - Creating additional visualization options
+- Improving the calculation accuracy
 
 ## 📄 License
 
